@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus App</title>
+    <style>
+        /* Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Fredoka+One&display=swap');
+
+        /* Global styles */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Exo', sans-serif;
+            background: #0A1F44;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+
+        /* Welcome page styles */
+        .welcome-page {
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+
+        .welcome-text {
+            font-size: 2rem;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        .dots {
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: grey;
+            border-radius: 50%;
+            transition: background-color 0.5s;
+        }
+
+        .dot.active {
+            background: linear-gradient(45deg, #ff85a2, #00d2ff);
+        }
+
+        .next-button {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #ff85a2, #00d2ff);
+            color: white;
+            font-size: 1.2rem;
+            font-family: 'Fredoka One', sans-serif;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+            transition: background 0.5s, transform 0.5s;
+            margin: 0 auto; /* Center the button */
+        }
+
+        .next-button:hover {
+            background: linear-gradient(45deg, #00d2ff, #ff85a2);
+        }
+
+        .next-button svg {
+            transition: transform 0.5s;
+            font-family: 'Fredoka One', sans-serif;
+        }
+
+        .next-button.confirmed svg {
+            transform: rotate(0deg);
+        }
+
+        @keyframes slideIn {
+            from {transform: translateX(-100%);}
+            to {transform: translateX(0);}
+        }
+
+        @keyframes fadeIn {
+            to {opacity: 1;}
+        }
+        
+        @keyframes slideOut {
+            from {transform: translateX(0);}
+            to {transform: translateX(-100%);}
+        }
+
+        @keyframes slideInSecondPage {
+            from {transform: translateX(100%);}
+            to {transform: translateX(0);}
+        }
+    </style>
+</head>
+<body>
+    <div id="welcomePage" class="welcome-page">
+        <div id="welcomeText" class="welcome-text">Welcome to the Nexus app!</div>
+        <div class="dots">
+            <div id="dot1" class="dot active"></div>
+            <div id="dot2" class="dot"></div>
+        </div>
+        <button id="nextButton" class="next-button">
+            <span>Next</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-arrow-right" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M10.146 4.854a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 9H1.5a.5.5 0 0 1 0-1h11.793l-3.647-3.646z"/>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const nextButton = document.getElementById('nextButton');
+            const welcomeText = document.getElementById('welcomeText');
+            const dot1 = document.getElementById('dot1');
+            const dot2 = document.getElementById('dot2');
+            const welcomePage = document.getElementById('welcomePage');
+
+            nextButton.addEventListener('click', () => {
+                if (dot1.classList.contains('active')) {
+                    // Transition the first page out
+                    welcomeText.style.animation = 'slideOut 0.5s forwards';
+                    nextButton.style.animation = 'slideOut 0.5s forwards';
+
+                    setTimeout(() => {
+                        dot1.classList.remove('active');
+                        dot2.classList.add('active');
+
+                        // Update the text and button
+                        welcomeText.textContent = "You will have a short tutorial.";
+                        nextButton.querySelector('span').textContent = "Confirm";
+                        nextButton.querySelector('svg').innerHTML = `
+                            <path d="M13.78 3.22a.75.75 0 0 0-1.06 0L6.75 9.19l-2.47-2.47a.75.75 0 1 0-1.06 1.06l3 3a.75.75 0 0 0 1.06 0l6-6a.75.75 0 0 0 0-1.06z"/>
+                        `;
+                        nextButton.classList.add('confirmed');
+
+                        // Redirect to the glitched text page
+                        nextButton.addEventListener('click', () => {
+                            window.location.href = 'glitch.html';
+                        });
+
+                        // Transition the second page in
+                        welcomeText.style.animation = 'slideInSecondPage 0.5s forwards';
+                        nextButton.style.animation = 'slideInSecondPage 0.5s forwards';
+                    }, 500);
+                } else {
+                    welcomePage.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
