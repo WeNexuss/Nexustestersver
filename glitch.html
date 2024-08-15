@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus, the next generation in a single community.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a1c2e;
+            color: white;
+            font-family: 'Exo', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .glitch {
+            font-size: 3em;
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .glitch-text {
+            display: block;
+            position: relative;
+            font-size: 1em;
+        }
+
+        @keyframes glitch-anim {
+            0%, 100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            25% {
+                opacity: 0.5;
+                transform: translateX(-2px);
+            }
+            50% {
+                opacity: 0.5;
+                transform: translateX(2px);
+            }
+            75% {
+                opacity: 0.5;
+                transform: translateX(-2px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="glitch">
+        <span class="glitch-text" id="glitch-text"></span>
+    </div>
+
+    <script>
+        const text = "Nexus, the next generation in a single community.";
+        const randomChars = "/&%+^'!\"()/[]}\\|+_=09(*)))?_-";
+        const glitchDuration = 200; // Duration of each glitch phase in milliseconds
+        const glitchInterval = 50;  // Interval for updating the text
+
+        function getRandomChar() {
+            return randomChars.charAt(Math.floor(Math.random() * randomChars.length));
+        }
+
+        function glitchText(element, originalText) {
+            let index = 0;
+            const length = originalText.length;
+            const totalGlitches = Math.ceil(length * 0.5); // Number of glitches before showing the original text
+
+            function updateText() {
+                let newText = '';
+                for (let i = 0; i < length; i++) {
+                    newText += i < index ? originalText.charAt(i) : getRandomChar();
+                }
+                element.textContent = newText;
+            }
+
+            function startGlitch() {
+                const interval = setInterval(() => {
+                    index = (index + 1) % (length + 1);
+                    updateText();
+                    if (index === 0) {
+                        clearInterval(interval);
+                        element.textContent = originalText;
+                    }
+                }, glitchInterval);
+            }
+
+            setTimeout(startGlitch, glitchDuration);
+        }
+
+        const glitchTextElement = document.getElementById('glitch-text');
+        glitchText(glitchTextElement, text);
+    </script>
+</body>
+</html>
