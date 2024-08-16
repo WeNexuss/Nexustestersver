@@ -17,10 +17,11 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            text-align: center; /* Center text horizontally */
         }
 
         .glitch {
-            font-size: 3em;
+            font-size: 5vw; /* Responsive font size */
             font-weight: 700;
             position: relative;
             display: inline-block;
@@ -32,7 +33,6 @@
         .glitch-text {
             display: block;
             position: relative;
-            font-size: 1em;
         }
 
         @keyframes glitch-anim {
@@ -51,6 +51,13 @@
             75% {
                 opacity: 0.5;
                 transform: translateX(-2px);
+            }
+        }
+
+        /* Additional styles for smaller screens */
+        @media (max-width: 600px) {
+            .glitch {
+                font-size: 7vw; /* Larger font size for smaller screens */
             }
         }
     </style>
