@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus - Login</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Exo:wght@400;700&family=Fredoka+One&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0a1c2e;
+            color: white;
+            font-family: 'Exo', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            padding: 20px;
+            background-color: #1e2d3e;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            animation-duration: 0.5s;
+            animation-fill-mode: forwards;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2em;
+            font-weight: 700;
+            color: #00ffea;
+        }
+
+        .input-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        input {
+            width: calc(100% - 24px);
+            padding: 12px;
+            margin: 10px auto;
+            background-color: #0a1c2e;
+            border: 1px solid #00ffea;
+            color: white;
+            font-size: 1em;
+            border-radius: 20px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #00ccbb;
+        }
+
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: linear-gradient(to right, #ff69b4, #00ced1);
+            border: none;
+            color: #0a1c2e;
+            font-size: 1em;
+            font-weight: bold;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #00ccbb;
+        }
+
+        .welcome-button {
+            padding: 10px 20px;
+            margin: 15px 0;
+            background: linear-gradient(to right, #ff69b4, #00ced1);
+            color: #0a1c2e;
+            font-size: 1em;
+            font-family: 'Fredoka One', sans-serif;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            width: 100%;
+        }
+
+        .welcome-button:hover {
+            background: linear-gradient(to right, #ff85c1, #00e3e4);
+        }
+
+        #message {
+            color: #ff4c4c;
+            margin-top: 20px;
+            font-size: 1em;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .back-arrow {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: #00ffea;
+            cursor: pointer;
+            display: none;
+        }
+
+        /* Scroll Animations */
+        .slide-up {
+            animation-name: slide-up;
+        }
+
+        .slide-down {
+            animation-name: slide-down;
+        }
+
+        @keyframes slide-up {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        @keyframes slide-down {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+
+        @keyframes slide-out-down {
+            from { transform: translateY(0); }
+            to { transform: translateY(100%); }
+        }
+
+        @keyframes slide-out-up {
+            from { transform: translateY(0); }
+            to { transform: translateY(-100%); }
+        }
+
+        .slide-out-down {
+            animation-name: slide-out-down;
+        }
+
+        .slide-out-up {
+            animation-name: slide-out-up;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container slide-up">
+        <h1>Create an account or sign in</h1>
+        <div class="button-container">
+            <button id="signupBtn" class="welcome-button">Sign Up</button>
+            <button id="signinBtn" class="welcome-button">Sign In</button>
+        </div>
+
+        <div id="signupForm" class="input-container">
+            <input type="text" id="signupUsername" placeholder="Enter username (3-20 characters)" maxlength="20" minlength="3">
+            <input type="password" id="signupPassword" placeholder="Enter password (at least 8 characters)" minlength="8">
+            <button id="signupSubmit" class="welcome-button">Create Account</button>
+        </div>
+
+        <div id="signinForm" class="input-container">
+            <input type="text" id="signinUsername" placeholder="Enter username">
+            <input type="password" id="signinPassword" placeholder="Enter password">
+            <button id="signinSubmit" class="welcome-button">Sign In</button>
+        </div>
+
+        <div id="message" class="hidden"></div>
+    </div>
+
+    <div id="backArrow" class="back-arrow">&larr;</div>
+
+    <script>
+        const signupBtn = document.getElementById('signupBtn');
+        const signinBtn = document.getElementById('signinBtn');
+        const signupForm = document.getElementById('signupForm');
+        const signinForm = document.getElementById('signinForm');
+        const backArrow = document.getElementById('backArrow');
+        const message = document.getElementById('message');
+        const signupSubmit = document.getElementById('signupSubmit');
+        const signinSubmit = document.getElementById('signinSubmit');
+
+        function slideOut(direction) {
+            document.querySelector('.container').classList.add(`slide-out-${direction}`);
+            setTimeout(() => {
+                document.querySelector('.container').classList.remove(`slide-out-${direction}`);
+                document.querySelector('.container').classList.add(`slide-${direction}`);
+            }, 500);
+        }
+
+        signupBtn.addEventListener('click', () => {
+            slideOut('down');
+            setTimeout(() => {
+                signupForm.style.display = 'block';
+                signinBtn.style.display = 'none';
+                signupBtn.style.display = 'none';
+                backArrow.style.display = 'block';
+            }, 500);
+        });
+
+        signinBtn.addEventListener('click', () => {
+            slideOut('down');
+            setTimeout(() => {
+                signinForm.style.display = 'block';
+                signinBtn.style.display = 'none';
+                signupBtn.style.display = 'none';
+                backArrow.style.display = 'block';
+            }, 500);
+        });
+
+        backArrow.addEventListener('click', () => {
+            slideOut('up');
+            setTimeout(() => {
+                signupForm.style.display = 'none';
+                signinForm.style.display = 'none';
+                signinBtn.style.display = 'block';
+                signupBtn.style.display = 'block';
+                backArrow.style.display = 'none';
+                message.classList.add('hidden');
+            }, 500);
+        });
+
+        signupSubmit.addEventListener('click', () => {
+            const username = document.getElementById('signupUsername').value;
+            const password = document.getElementById('signupPassword').value;
+
+            if (username.length < 3 || username.length > 20 || password.length < 8) {
+                message.textContent = "Please ensure username and password meet the criteria.";
+                message.classList.remove('hidden');
+                return;
+            }
+
+            if (localStorage.getItem(username)) {
+                message.textContent = "Username already taken. Please choose another.";
+                message.classList.remove('hidden');
+                return;
+            }
+
+            localStorage.setItem(username, password);
+            message.textContent = "Account created successfully!";
+            message.classList.remove('hidden');
+        });
+
+        signinSubmit.addEventListener('click', () => {
+            const username = document.getElementById('signinUsername').value;
+            const password = document.getElementById('signinPassword').value;
+
+            if (localStorage.getItem(username) === password) {
+                message.textContent = "Sign in successful!";
+                message.classList.remove('hidden');
+
+                // Redirect to index.html after successful login
+                setTimeout(() => {
+                    window.location.href = 'welcome.html';
+                }, 1000); // Redirects after 1 second
+            } else {
+                message.textContent = "Incorrect username or password.";
+                message.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
